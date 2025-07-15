@@ -1,89 +1,54 @@
-# test
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Slot Game</title>
-  <style>
-    body {
-      text-align: center;
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: white;
-      margin-top: 50px;
-    }
-    .slot {
-      font-size: 60px;
-      margin: 20px;
-    }
-    .reels {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-    button {
-      font-size: 20px;
-      padding: 10px 20px;
-      margin-top: 20px;
-      background: limegreen;
-      color: black;
-      border: none;
-      cursor: pointer;
-    }
-    #message {
-      margin-top: 30px;
-      font-size: 24px;
-      color: yellow;
-    }
-  </style>
-</head>
-<body>
-  <h1>🎰 Slot Machine Game</h1>
-  <div class="reels">
-    <div class="slot" id="slot1">🍒</div>
-    <div class="slot" id="slot2">🍋</div>
-    <div class="slot" id="slot3">🍊</div>
-  </div>
-  <button onclick="spin()">🎲 Spin</button>
-  <div id="message"></div>
+import random
+import time
 
-  <script>
-    const symbols = ["🍒", "🍋", "🍊", "🔔", "⭐", "🍇"];
-    let playCount = 0;
-    const maxPlays = 10;
+def spin_slot():
+    symbols = ['🍒', '🍋', '🍊', '🍇', '🔔', '7', '💎', '💰']
+    
+    # Generate three random symbols
+    reel1 = random.choice(symbols)
+    reel2 = random.choice(symbols)
+    reel3 = random.choice(symbols)
+    
+    # Display spinning animation
+    print("\nSpinning...")
+    for _ in range(5):
+        print(f"\r{random.choice(symbols)} | {random.choice(symbols)} | {random.choice(symbols)}", end="")
+        time.sleep(0.1)
+    
+    # Show final result
+    print(f"\r{reel1} | {reel2} | {reel3}", end="")
+    
+    # Check for wins
+    if reel1 == reel2 == reel3:
+        print("\n🎉 Jackpot! All three symbols match! 🎉")
+        return 10
+    elif reel1 == reel2 or reel2 == reel3 or reel1 == reel3:
+        print("\n👍 You win! Two symbols match! 👍")
+        return 3
+    else:
+        print("\n😢 No win this time. Try again! 😢")
+        return 0
 
-    function getRandomSymbol() {
-      return symbols[Math.floor(Math.random() * symbols.length)];
-    }
+def slot_game():
+    credits = 20
+    print("Welcome to the Python Slot Machine!")
+    print(f"You start with {credits} credits.")
+    print("Each spin costs 1 credit. Matching symbols win credits!")
+    
+    while credits > 0:
+        print(f"\nYou have {credits} credits remaining.")
+        choice = input("Press Enter to spin or Q to quit: ").upper()
+        
+        if choice == 'Q':
+            break
+            
+        credits -= 1  # Deduct 1 credit per spin
+        winnings = spin_slot()
+        credits += winnings
+        
+    print(f"\nGame over! You finished with {credits} credits.")
+    print("Thanks for playing!")
 
-    function spin() {
-      if (playCount >= maxPlays) {
-        document.getElementById("message").textContent = "🎉 You've reached 10 plays!";
-        return;
-      }
-
-      const s1 = getRandomSymbol();
-      const s2 = getRandomSymbol();
-      const s3 = getRandomSymbol();
-
-      document.getElementById("slot1").textContent = s1;
-      document.getElementById("slot2").textContent = s2;
-      document.getElementById("slot3").textContent = s3;
-
-      playCount++;
-
-      if (s1 === s2 && s2 === s3) {
-        document.getElementById("message").textContent = `🎊 Jackpot! (${playCount}/10)`;
-      } else {
-        document.getElementById("message").textContent = `Try again... (${playCount}/10)`;
-      }
-
-      if (playCount === maxPlays) {
-        document.querySelector("button").disabled = true;
-        document.getElementById("message").textContent += " Game Over!";
-      }
-    }
-  </script>
-</body>
-</html>
+if __name__ == "__main__":
+    slot_game()
+    
